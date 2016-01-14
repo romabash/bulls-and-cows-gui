@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = "kbgui"
   spec.version       = '1.0'
   spec.authors       = ["Roma"]
-  spec.email         = ["romanofkin@gmail.com"]
+  spec.email         = [""]
   spec.summary       = %q{Logic number game}
   spec.description   = %q{Bulls and Cows: Logic number game gui}
   spec.homepage      = ""
