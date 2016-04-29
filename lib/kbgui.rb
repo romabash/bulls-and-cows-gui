@@ -10,82 +10,80 @@ class User
   include Layout
 
   def initialize
-	
     @@users.bind("<ComboboxSelected>") {signed_user}
-	  @@log.bind("Return") {insert_name}
+    @@log.bind("Return") {insert_name}
 		
-		@@button.state ('disabled')
-		@@f.state ('disabled')
-		@@entry.state ('disabled')
+    @@button.state ('disabled')
+    @@f.state ('disabled')
+    @@entry.state ('disabled')
     @@answer.state ('disabled')
-	  @@info.state ('disabled')
-		@@arrayb.each {|x| x.state ('disabled')}
+    @@info.state ('disabled')
+    @@arrayb.each {|x| x.state ('disabled')}
 		
-		@@users.state ('disabled')
-		@@log.state ('disabled')
+    @@users.state ('disabled')
+    @@log.state ('disabled')
 			
-		start_quick_game = proc{quick_game}
-		log_in_button = proc{log_in}
-		sign_up_button = proc{sign_up}
-		clear_users = proc{clear}
+    start_quick_game = proc{quick_game}
+    log_in_button = proc{log_in}
+    sign_up_button = proc{sign_up}
+    clear_users = proc{clear}
 		
-		@@sel_user['command'] = log_in_button
-		@@log_in['command'] = sign_up_button
-	  @@quick_game['command'] = start_quick_game
-		@@reset_users['command'] = clear_users
+    @@sel_user['command'] = log_in_button
+    @@log_in['command'] = sign_up_button
+    @@quick_game['command'] = start_quick_game
+    @@reset_users['command'] = clear_users
 		
-		his = proc{scores}
-		@@high_score['command'] = his
+    his = proc{scores}
+    @@high_score['command'] = his
 
-		@click = 0
-		rules = proc{game_rules}
-		@@game_rules['command'] = rules
-		
+    @click = 0
+    rules = proc{game_rules}
+    @@game_rules['command'] = rules
   end
 	
-	def display_scores
+  def display_scores
 
-		@@arrayb.each {|x| x['style'] = 'Normal.TButton'}
-		@@info.state ('normal')
-	  level = @@gamenum
+    @@arrayb.each {|x| x['style'] = 'Normal.TButton'}
+    @@info.state ('normal')
+    level = @@gamenum
 		
-		if level < 1 || level > 10
-			@@info.delete(1.0, 'end') #deletes everything in the text 
-		  @@info.insert(1.0, "Select a level from 1 - 10")
-			@@f.focus
-		  @@gamenum.value = ""
-		else			
-		  json = File.read(@@json[@@gamenum - 1])
-		  scores = JSON.parse(json)
+    if level < 1 || level > 10
+      @@info.delete(1.0, 'end') #deletes everything in the text 
+      @@info.insert(1.0, "Select a level from 1 - 10")
+      @@f.focus
+      @@gamenum.value = ""
+    else			
+      json = File.read(@@json[@@gamenum - 1])
+      scores = JSON.parse(json)
 			
-		  if scores.empty?
-		    @@info.delete(1.0, 'end') #deletes everything in the text 
-		    @@info.insert(1.0, "No high scores yet for level #{level}")
-	  	else
-			  @@info.delete(1.0, 'end') #deletes everything in the text 
+      if scores.empty?
+        @@info.delete(1.0, 'end') #deletes everything in the text 
+				@@info.insert(1.0, "No high scores yet for level #{level}")
+      else
+				@@info.delete(1.0, 'end') #deletes everything in the text 
 				@@info.insert(1.0, "\tHigh Scores for level #{level}:\n\n")
 				scores = scores.sort {|a1,a2| a2[1]<=>a1[1]}
-	  	  scores.each do |name, score| 
-		      @@info.insert(3.0, "#{name} has solved it in #{score} steps\n")
-			  end
-		  end
-		  @@info.state ('disabled')
-		  @@f.focus
-		  @@gamenum.value = ""
-		end
-	end
+				scores.each do |name, score| 
+	  			@@info.insert(3.0, "#{name} has solved it in #{score} steps\n")
+				end
+      end
+			@@info.state ('disabled')
+			@@f.focus
+			@@gamenum.value = ""
+    end
+  end
 	
-	def scores
-	  @@selection.value = "Select a level to see high scores"
-	  @@entry.state ('disabled')
-		@@text.value = ""
-	  @@arrayb.each {|x| x.state ('disabled')}
-		@@arrayb.each {|x| x['style'] = 'Normal.TButton'}
-		if @click == 1
-		  @@info.raise
-			@click -= 1
-			@@inst_resume.value = 'Instructions'#Resume button becomes 'Instructions' button again
-		end
+  def scores
+    @@selection.value = "Select a level to see high scores"
+    @@entry.state ('disabled')
+    @@text.value = ""
+    @@arrayb.each {|x| x.state ('disabled')}
+    @@arrayb.each {|x| x['style'] = 'Normal.TButton'}
+      if @click == 1
+				@@info.raise
+				@click -= 1
+				@@inst_resume.value = 'Instructions'#Resume button becomes 'Instructions' button again
+      end
 	  @@info.state ('normal')
 		@@info.delete(1.0, 'end') #deletes everything in the text 
 		@@info.insert(1.0, "Select a level to see high scores")
